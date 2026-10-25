@@ -45,17 +45,17 @@ export const MuscleGain6LBS:React.FC=()=>{
   <div style={{position:'absolute',inset:0,background:'linear-gradient(0deg,#000 0%,transparent 36%,transparent 80%,#0009)',pointerEvents:'none'}}/>
   {particles.map((p,i)=><div key={i} style={{position:'absolute',left:p.x,top:p.y,width:p.size,height:p.size,borderRadius:'50%',background:i%3===0?'#fff':RED,opacity:.2+growth*.5,boxShadow:`0 0 18px ${RED}`}}/>)}
   <div style={{position:'absolute',top:140,width:'100%',textAlign:'center',fontSize:30,fontWeight:900,letterSpacing:9,color:'#ff5066'}}>TRANSFORMATION / 006</div>
-  <div style={{position:'absolute',top:375,width:'100%',textAlign:'center',fontSize:77,fontWeight:900,opacity:intro,transform:`translateY(${(1-intro)*50}px)`,textShadow:'0 5px 30px #000'}}>BUILD YOUR BODY</div>
+  <div style={{position:'absolute',top:375,width:'100%',textAlign:'center',fontSize:77,fontWeight:900,opacity:intro,transform:`translateY(${(1-intro)*50}px)`,textShadow:'0 5px 30px #000'}}>DÉVELOPPE TES MUSCLES</div>
   <div style={{position:'absolute',bottom:300,width:'100%',textAlign:'center',opacity:mid}}>
    <div style={{fontSize:160,fontWeight:900,textShadow:`0 0 60px ${RED}`}}>{count} <span style={{fontSize:75}}>LBS</span></div>
    <div style={{width:680,height:18,borderRadius:20,margin:'15px auto',background:'#4d1a28',overflow:'hidden'}}><div style={{width:`${growth*100}%`,height:'100%',background:RED,boxShadow:`0 0 20px ${RED}`}}/></div>
-   <div style={{fontSize:32,letterSpacing:8,fontWeight:800}}>STRENGTH IN PROGRESS</div>
+   <div style={{fontSize:32,letterSpacing:8,fontWeight:800}}>PROGRESSION MUSCULAIRE</div>
   </div>
   {frame>=120&&<div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',opacity:interpolate(reveal,[0,.5],[0,1],clamp),transform:`scale(${interpolate(reveal,[0,1],[1.5,1],clamp)})`}}>
    <div style={{fontSize:225,fontWeight:900,letterSpacing:-10,textShadow:`0 0 45px ${RED},0 0 130px ${RED},0 8px 35px #000`}}>+6 LBS</div>
-   <div style={{fontSize:70,fontWeight:900,letterSpacing:10,textShadow:'0 5px 20px #000'}}>MUSCLE GAIN</div>
+   <div style={{fontSize:70,fontWeight:900,letterSpacing:10,textShadow:'0 5px 20px #000'}}>DE MUSCLE GAGNÉS</div>
    <div style={{width:350,height:8,background:RED,marginTop:40,boxShadow:`0 0 30px ${RED}`}}/>
   </div>}
-  <div style={{position:'absolute',bottom:80,width:'100%',textAlign:'center',fontSize:25,letterSpacing:6,color:'#c3a8ae'}}>EARN YOUR EVOLUTION</div>
+  <div style={{position:'absolute',bottom:80,width:'100%',textAlign:'center',fontSize:25,letterSpacing:6,color:'#c3a8ae'}}>DÉPASSE TES LIMITES</div>
  </AbsoluteFill>;
 };
