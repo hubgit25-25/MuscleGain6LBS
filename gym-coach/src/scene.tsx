@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill,Audio,Easing,Img,interpolate,OffthreadVideo,spring,staticFile,useCurrentFrame,useVideoConfig} from 'remotion';
+import {AbsoluteFill,Audio,Easing,Img,interpolate,OffthreadVideo,Sequence,spring,staticFile,useCurrentFrame,useVideoConfig} from 'remotion';
 import {assets} from './assets';
 
 const clamp={extrapolateLeft:'clamp' as const,extrapolateRight:'clamp' as const};
@@ -77,9 +77,9 @@ export const GymCoachScene:React.FC=()=>{
    <div style={{textAlign:'center',fontSize:111,fontWeight:950,lineHeight:1.03,WebkitTextStroke:'3px #17130b',textShadow:'0 12px 20px #000,0 0 55px #ffd834'}}>ÉCOUTE<br/><span style={{color:yellow}}>BIEN !</span></div>
   </div>}
   <AbsoluteFill style={{background:'#fff',opacity:hitOpacity,pointerEvents:'none'}}/>
-  {assets.studentVoice&&<Audio src={staticFile(assets.studentVoice)} startFrom={0} volume={1} />}
-  {assets.coachVoice&&frame>=120&&<Audio src={staticFile(assets.coachVoice)} startFrom={0} volume={1} />}
-  {assets.whoosh&&frame>=119&&<Audio src={staticFile(assets.whoosh)} volume={.6}/>}
-  {assets.impact&&frame>=120&&<Audio src={staticFile(assets.impact)} volume={.9}/>}
+  {assets.studentVoice&&<Sequence from={30}><Audio src={staticFile(assets.studentVoice)} volume={1}/></Sequence>}
+  {assets.coachVoice&&<Sequence from={120}><Audio src={staticFile(assets.coachVoice)} volume={1}/></Sequence>}
+  {assets.whoosh&&<Sequence from={119}><Audio src={staticFile(assets.whoosh)} volume={.6}/></Sequence>}
+  {assets.impact&&<Sequence from={120}><Audio src={staticFile(assets.impact)} volume={.9}/></Sequence>}
  </AbsoluteFill>;
 };
