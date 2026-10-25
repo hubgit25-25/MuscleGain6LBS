@@ -1,0 +1,23 @@
+name: Render MuscleGain6LBS
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: bun run typecheck
+      - run: bun run build
+      - run: bun run test-render
+      - run: bun run render
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MuscleGain6LBS-MP4
+          path: out/MuscleGain6LBS.mp4
+          if-no-files-found: error
+          retention-days: 30
