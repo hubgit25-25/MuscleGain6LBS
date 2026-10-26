@@ -1,3 +1,2 @@
-// Optionnel : ajouter une vidéo réelle ou une image dans public/.
-// Attention : pour conserver la balance visible, utiliser un rush où la personne se pèse.
-export const assets:{personVideo?:string;personImage?:string}={};
+// REQUIRED: add this actual licensed MP4 in public/. No SVG or placeholder avatar is used.
+export const assets = {personVideo:'athlete-on-scale.mp4'} as const;
