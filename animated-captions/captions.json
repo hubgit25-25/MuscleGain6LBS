@@ -1,0 +1,55 @@
+{
+  "note": "DEMONSTRATION ONLY. Replace with actual word-level transcript timestamps in seconds. Not synchronized to the uploaded audio.",
+  "words": [
+    {
+      "text": "UNE",
+      "start": 0.2,
+      "end": 0.52
+    },
+    {
+      "text": "VIDÉO",
+      "start": 0.52,
+      "end": 0.94,
+      "emphasis": "yellow"
+    },
+    {
+      "text": "DYNAMIQUE",
+      "start": 0.94,
+      "end": 1.5
+    },
+    {
+      "text": "AVEC",
+      "start": 1.65,
+      "end": 2.05
+    },
+    {
+      "text": "DES",
+      "start": 2.05,
+      "end": 2.35
+    },
+    {
+      "text": "CAPTIONS",
+      "start": 2.35,
+      "end": 2.85,
+      "emphasis": "red",
+      "outline": "red"
+    },
+    {
+      "text": "CLAIRS",
+      "start": 3.05,
+      "end": 3.55
+    },
+    {
+      "text": "ET",
+      "start": 3.55,
+      "end": 3.85
+    },
+    {
+      "text": "IMPACTANTS",
+      "start": 3.85,
+      "end": 4.6,
+      "emphasis": "yellow",
+      "outline": "yellow"
+    }
+  ]
+}
