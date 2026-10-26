@@ -1,0 +1,30 @@
+name: Render Weight195LBS
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'weight-195-lbs/**'
+      - '.github/workflows/weight-195-lbs-render.yml'
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: weight-195-lbs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun i
+      - name: Validate and build
+        run: bun run build
+      - name: Render H.264 MP4
+        run: bun run render
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Weight195LBS-MP4
+          path: weight-195-lbs/out/Weight195LBS.mp4
+          retention-days: 30
+          if-no-files-found: error
