@@ -1,0 +1,33 @@
+name: Render SorosFinancialMotion
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'soros-financial-motion/**'
+      - '.github/workflows/soros-financial-motion-render.yml'
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: soros-financial-motion
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun i
+      - name: Build and typecheck
+        run: bun run build
+      - name: Render H.264
+        run: bun run render
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SorosFinancialMotion-MP4
+          path: soros-financial-motion/out/SorosFinancialMotion.mp4
+          if-no-files-found: error
+          retention-days: 30
