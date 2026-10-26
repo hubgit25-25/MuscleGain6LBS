@@ -16,6 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
+      - name: Check required realistic footage
+        run: |
+          if [ ! -s public/athlete-on-scale.mp4 ]; then
+            echo "::error::Missing public/athlete-on-scale.mp4. Upload a real or AI-generated 4-second MP4 before rendering. No SVG avatar fallback."
+            exit 1
+          fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: oven-sh/setup-bun@v2
       - name: Install dependencies
         run: bun i
       - name: Build and validate
