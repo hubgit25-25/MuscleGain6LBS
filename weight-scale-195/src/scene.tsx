@@ -22,7 +22,7 @@ export const WeightScale195:React.FC=()=>{
  const lineProgress=ease(frame,86,100);
  return <AbsoluteFill style={{overflow:'hidden',background:'#07080c',color:'white',fontFamily:'Montserrat,Arial Black,Arial,sans-serif'}}>
   <AbsoluteFill style={{transform:`scale(${1.015+finalZoom*.085}) translateX(${shake*.25}px)`,transformOrigin:'43% 52%'}}>
-   <OffthreadVideo src={staticFile(assets.personVideo)} muted pauseWhenBuffering={false} style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center'}}/>
+   <OffthreadVideo src={staticFile(assets.personVideo)} muted style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center'}}/>
   </AbsoluteFill>
   <AbsoluteFill style={{background:'linear-gradient(90deg,transparent 28%,#07070a22 65%,#06060999 100%)',pointerEvents:'none'}}/>
   <AbsoluteFill style={{background:'radial-gradient(ellipse at 45% 48%,transparent 48%,#0007 100%)',pointerEvents:'none'}}/>
