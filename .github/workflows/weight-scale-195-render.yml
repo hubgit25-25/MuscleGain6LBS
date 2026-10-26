@@ -15,7 +15,6 @@ jobs:
         working-directory: weight-scale-195
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
       - name: Check required realistic footage
         run: |
           if [ ! -s public/athlete-on-scale.mp4 ]; then
