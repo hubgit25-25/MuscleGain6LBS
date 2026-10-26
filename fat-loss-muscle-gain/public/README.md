@@ -1,0 +1,1 @@
+Add a licensed continuous 4-second 1080x1920 AI-generated video named transformation.mp4 and set transformationVideo:'transformation.mp4' in src/assets.ts. Use the same adult subject and fixed face throughout. No audio or captions.
