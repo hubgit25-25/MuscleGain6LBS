@@ -1,0 +1,1 @@
+Optional licensed real footage: athlete-on-scale.mp4 (or athlete-on-scale.png). Add the file here and set personVideo or personImage in src/assets.ts. The default SVG fallback includes an animated athlete and digital scale.
