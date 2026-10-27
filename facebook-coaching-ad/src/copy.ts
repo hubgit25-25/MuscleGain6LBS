@@ -1,0 +1,1 @@
+export const copy={full:'Pas besoin d’être au gym tous les jours, on n’avait pas besoin d’acheter plein de choses.',firstHeadline:'PAS BESOIN D’ÊTRE AU GYM TOUS LES JOURS',secondHeadline:'ON N’AVAIT PAS BESOIN D’ACHETER PLEIN DE CHOSES'} as const;
