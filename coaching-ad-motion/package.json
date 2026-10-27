@@ -1,0 +1,22 @@
+{
+  "name": "coaching-ad-motion",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "build": "tsc --noEmit && remotion compositions src/index.ts",
+    "render": "remotion render src/index.ts CoachingAdMotion out/CoachingAdMotion.mp4 --codec h264 --crf 18 --concurrency 2"
+  },
+  "dependencies": {
+    "remotion": "4.0.370",
+    "@remotion/cli": "4.0.370",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "5.8.3",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0"
+  }
+}
