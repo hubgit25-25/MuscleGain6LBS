@@ -1,0 +1,32 @@
+name: Render CoachingAdMotion
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'coaching-ad-motion/**'
+      - '.github/workflows/coaching-ad-motion-render.yml'
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: coaching-ad-motion
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: oven-sh/setup-bun@v2
+      - name: Check source video
+        run: test -s public/facebook-capture.mp4 || (echo 'Upload public/facebook-capture.mp4 from the ZIP first' && exit 1)
+      - run: bun i
+      - run: bun run build
+      - run: bun run render
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CoachingAdMotion-MP4
+          path: coaching-ad-motion/out/CoachingAdMotion.mp4
+          if-no-files-found: error
+          retention-days: 30
