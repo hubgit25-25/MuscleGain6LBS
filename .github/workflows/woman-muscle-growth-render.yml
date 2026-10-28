@@ -1,0 +1,33 @@
+name: Render WomanMuscleGrowth
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'woman-muscle-growth/**'
+      - '.github/workflows/woman-muscle-growth-render.yml'
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: woman-muscle-growth
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: oven-sh/setup-bun@v2
+      - name: Check source video
+        run: |
+          test -s public/woman-muscle-growth.mp4 || (echo "Required photorealistic source video missing: public/woman-muscle-growth.mp4" && exit 1)
+      - run: bun i
+      - run: bun run build
+      - run: bun run render
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WomanMuscleGrowth-MP4
+          path: woman-muscle-growth/out/WomanMuscleGrowth.mp4
+          if-no-files-found: error
+          retention-days: 30
