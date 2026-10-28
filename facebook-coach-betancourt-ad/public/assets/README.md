@@ -1,0 +1,1 @@
+Place the supplied original Coach Betancourt Naturopathe logo at `public/assets/coach-betancourt-logo.png`. Keep its original aspect ratio; Remotion displays it centered inside a circular frame using objectFit contain. The render workflow requires this exact image; it never replaces it with a generic avatar.

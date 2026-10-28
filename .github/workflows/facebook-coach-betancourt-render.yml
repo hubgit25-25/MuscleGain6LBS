@@ -1,0 +1,31 @@
+name: Render FacebookCoachBetancourtAd
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'facebook-coach-betancourt-ad/**'
+      - '.github/workflows/facebook-coach-betancourt-render.yml'
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: facebook-coach-betancourt-ad
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: oven-sh/setup-bun@v2
+      - name: Require supplied brand logo
+        run: test -s public/assets/coach-betancourt-logo.png || (echo "Upload the original logo at public/assets/coach-betancourt-logo.png" && exit 1)
+      - run: bun i
+      - run: bun run build
+      - run: bun run render
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FacebookCoachBetancourtAd-MP4
+          path: facebook-coach-betancourt-ad/out/FacebookCoachBetancourtAd.mp4
+          if-no-files-found: error
