@@ -1,0 +1,23 @@
+{
+  "name": "15-deux-bilans",
+  "private": true,
+  "scripts": {
+    "build": "tsc --noEmit && remotion compositions src/index.tsx",
+    "render": "remotion render src/index.tsx DeuxBilans15 out/15_Deux_Bilans.mp4 --codec h264 --crf 18 --concurrency 2"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.370",
+    "@remotion/three": "4.0.370",
+    "@react-three/fiber": "9.1.2",
+    "remotion": "4.0.370",
+    "three": "0.175.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "@types/three": "0.175.0",
+    "typescript": "5.8.3"
+  }
+}
