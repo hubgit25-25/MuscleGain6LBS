@@ -1,0 +1,24 @@
+{
+  "name": "european-tensions-1992",
+  "private": true,
+  "scripts": {
+    "build": "tsc --noEmit && remotion compositions src/index.ts",
+    "render": "remotion render src/index.ts EuropeanTensions1992 out/EuropeanTensions1992.mp4 --codec h264 --crf 18 --concurrency 2",
+    "dev": "remotion studio src/index.ts"
+  },
+  "dependencies": {
+    "remotion": "4.0.370",
+    "@remotion/cli": "4.0.370",
+    "@remotion/three": "4.0.370",
+    "@react-three/fiber": "9.1.2",
+    "three": "0.175.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "5.8.3",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "@types/three": "0.175.0"
+  }
+}
