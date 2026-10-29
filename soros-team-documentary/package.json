@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "tsc --noEmit && remotion compositions src/index.ts",
+    "render": "remotion render src/index.ts SorosAndTeam1992 out/SorosAndTeam1992.mp4 --codec h264"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.370",
+    "remotion": "4.0.370",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "5.8.3",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0"
+  }
+}
