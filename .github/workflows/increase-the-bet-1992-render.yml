@@ -1,0 +1,56 @@
+name: Render IncreaseTheBet1992
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'increase-the-bet-1992/**'
+      - '.github/workflows/increase-the-bet-1992-render.yml'
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: increase-the-bet-1992
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: oven-sh/setup-bun@v2
+      - name: Download authentic portraits
+        run: |
+          mkdir -p public/portraits
+          curl -fL --retry 3 'https://commons.wikimedia.org/wiki/Special:Redirect/file/George_Soros.jpg' -o public/portraits/soros.jpg
+          python3 -m pip install --quiet pillow --break-system-packages
+          python3 - <<'PY'
+          import re,html,urllib.request,urllib.parse,pathlib,io
+          from PIL import Image
+          page='https://spxarena.com/investors/druckenmiller/'
+          src=urllib.request.urlopen(urllib.request.Request(page,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode('utf-8','replace')
+          urls=[]
+          for tag in re.findall(r'<(?:img|meta|source)\b[^>]+>',src,re.I):
+              if re.search(r'druckenmiller|portrait|og:image',tag,re.I):
+                  urls+=re.findall(r'(?:src|content|srcset)=["\x27]([^"\x27]+)',tag,re.I)
+          urls+=[x for x in re.findall(r'https?[^"\x27<> ]+druckenmiller[^"\x27<> ]+\.(?:webp|jpg|jpeg|png)',src,re.I)]
+          for x in urls:
+              u=urllib.parse.urljoin(page,html.unescape(x.split(' ')[0]))
+              try:
+                  data=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0','Referer':page}),timeout=30).read()
+                  if len(data)<12000:continue
+                  Image.open(io.BytesIO(data)).convert('RGB').save('public/portraits/druckenmiller.jpg',quality=93)
+                  print('Portrait source:',u)
+                  break
+              except Exception as e: print(str(e)[:120])
+          else:raise SystemExit('Authentic Druckenmiller image not retrieved')
+          PY
+      - run: bun i
+      - run: bun run build
+      - run: bun run render
+      - uses: actions/upload-artifact@v4
+        with:
+          name: IncreaseTheBet1992-MP4
+          path: increase-the-bet-1992/out/IncreaseTheBet1992.mp4
+          if-no-files-found: error
+          retention-days: 30
