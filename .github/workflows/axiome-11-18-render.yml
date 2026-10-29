@@ -1,0 +1,74 @@
+name: Render AXIOME videos 11-18
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '11-la-banque-achete/**'
+      - '12-11-heures/**'
+      - '13-14h15/**'
+      - '14-la-promesse-cede/**'
+      - '15-deux-bilans/**'
+      - '16-le-surnom/**'
+      - '17-apres-la-crise/**'
+      - '18-ce-qui-na-pas-tenu/**'
+      - '.github/workflows/axiome-11-18-render.yml'
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - folder: 17-apres-la-crise
+            composition: ApresLaCrise17
+            artifact: AXIOME-17-17-apres-la-crise-MP4
+            output: 17_Apres_La_Crise.mp4
+          - folder: 18-ce-qui-na-pas-tenu
+            composition: CeQuiNaPasTenu18
+            artifact: AXIOME-18-18-ce-qui-na-pas-tenu-MP4
+            output: 18_Ce_Qui_Na_Pas_Tenu.mp4
+          - folder: 11-la-banque-achete
+            composition: LaBanqueAchete11
+            artifact: AXIOME-11-la-banque-achete-MP4
+            output: 11_La_Banque_Achete.mp4
+          - folder: 12-11-heures
+            composition: OnzeHeures12
+            artifact: AXIOME-12-11-heures-MP4
+            output: 12_11_Heures.mp4
+          - folder: 13-14h15
+            composition: QuatorzeHeuresQuinze13
+            artifact: AXIOME-13-14h15-MP4
+            output: 13_14h15.mp4
+          - folder: 14-la-promesse-cede
+            composition: LaPromesseCede14
+            artifact: AXIOME-14-la-promesse-cede-MP4
+            output: 14_La_Promesse_Cede.mp4
+          - folder: 15-deux-bilans
+            composition: DeuxBilans15
+            artifact: AXIOME-15-deux-bilans-MP4
+            output: 15_Deux_Bilans.mp4
+          - folder: 16-le-surnom
+            composition: LeSurnom16
+            artifact: AXIOME-16-le-surnom-MP4
+            output: 16_Le_Surnom.mp4
+    defaults:
+      run:
+        working-directory: ${{ matrix.folder }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: bun run build
+      - run: bun run render
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.folder }}/out/${{ matrix.output }}
+          if-no-files-found: error
+          retention-days: 30
