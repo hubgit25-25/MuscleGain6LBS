@@ -1,0 +1,21 @@
+{
+  "name": "erm-1992-cinematic",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "build": "tsc --noEmit && remotion compositions src/index.ts",
+    "render": "remotion render src/index.ts ERM1992 out/ERM1992.mp4 --codec h264 --crf 18"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.370",
+    "remotion": "4.0.370",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "typescript": "5.8.3"
+  }
+}
