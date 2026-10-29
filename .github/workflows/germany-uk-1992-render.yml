@@ -1,0 +1,39 @@
+name: Render GermanyUK1992
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'germany-uk-1992-conflict/**'
+      - '.github/workflows/germany-uk-1992-render.yml'
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: germany-uk-1992-conflict
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: oven-sh/setup-bun@v2
+      - name: Download Creative Commons historical archives
+        shell: bash
+        run: |
+          mkdir -p public/archives
+          curl -fL --retry 4 --retry-delay 3 --user-agent "RemotionDocumentary/1.0 (educational attribution)" 'https://commons.wikimedia.org/wiki/Special:Redirect/file/BerlinWall-BrandenburgGate.jpg' -o public/archives/berlin-1989.jpg
+          curl -fL --retry 4 --retry-delay 3 --user-agent "RemotionDocumentary/1.0 (educational attribution)" 'https://commons.wikimedia.org/wiki/Special:Redirect/file/The_office_is_closed%2C_1990_-_geograph.org.uk_-_4784350.jpg' -o public/archives/chelmsford-1990.jpg
+          file public/archives/*.jpg
+          test "$(stat -c%s public/archives/berlin-1989.jpg)" -gt 10000
+          test "$(stat -c%s public/archives/chelmsford-1990.jpg)" -gt 10000
+      - run: bun i
+      - run: bun run build
+      - run: bun run render
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GermanyUK1992-MP4
+          path: germany-uk-1992-conflict/out/GermanyUK1992.mp4
+          if-no-files-found: error
+          retention-days: 30
