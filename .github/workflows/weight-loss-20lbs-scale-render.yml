@@ -1,0 +1,29 @@
+name: Render WeightLoss20LBS
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'weight-loss-20lbs-scale/**'
+      - '.github/workflows/weight-loss-20lbs-scale-render.yml'
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: weight-loss-20lbs-scale
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: oven-sh/setup-bun@v2
+      - run: bun i
+      - run: bun run build
+      - run: bun run render
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WeightLoss20LBS-MP4
+          path: weight-loss-20lbs-scale/out/WeightLoss20LBS.mp4
+          if-no-files-found: error
