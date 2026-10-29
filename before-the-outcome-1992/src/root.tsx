@@ -1,0 +1,1 @@
+import React from 'react';import {Composition} from 'remotion';import {BeforeTheOutcome1992} from './scene';export const Root=()=> <Composition id="BeforeTheOutcome1992" component={BeforeTheOutcome1992} durationInFrames={480} fps={60} width={1920} height={1080}/>;
