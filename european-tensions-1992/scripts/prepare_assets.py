@@ -1,9 +1,20 @@
-import io,json,os,urllib.request,urllib.parse
+import io,json,os,urllib.request,urllib.parse,urllib.error,time,random
 from PIL import Image
 os.makedirs('public/archive',exist_ok=True)
 def get(url):
  req=urllib.request.Request(url,headers={'User-Agent':'DocumentaryRemotion/1.0 (archive research; contact github.com/hubgit25-25/MuscleGain6LBS)'})
- return urllib.request.urlopen(req,timeout=40).read()
+ for attempt in range(7):
+  try:
+   with urllib.request.urlopen(req,timeout=40) as response:return response.read()
+  except urllib.error.HTTPError as exc:
+   if exc.code not in (429,500,502,503,504) or attempt==6:raise
+   retry=exc.headers.get('Retry-After')
+   delay=min(90,max(8, int(retry) if retry and retry.isdigit() else 12*(attempt+1)))
+   print('Rate limited, waiting',delay,'seconds',flush=True)
+   time.sleep(delay+random.random()*2)
+  except (TimeoutError,ConnectionError):
+   if attempt==6:raise
+   time.sleep(8*(attempt+1))
 # Genuine archival images of the Maastricht treaty signatories from Wikimedia Commons.
 # Note: Denmark, Italy, France photos show their 1992 signatories, not the referendums or lira crisis.
 sources={
@@ -18,6 +29,7 @@ for key,name in sources.items():
  im=Image.open(io.BytesIO(raw)).convert('RGB')
  im.save('public/archive/'+key+'.jpg',quality=92)
  print(key,im.size,url)
+ time.sleep(5)
 # Geographically sourced outlines: Natural Earth GeoJSON dataset, reprojected into a flat map plane.
 geo=json.loads(get('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson'))
 result=[]
