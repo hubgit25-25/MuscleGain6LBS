@@ -9,6 +9,7 @@ on:
 jobs:
   render:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     defaults:
       run:
         working-directory: soros-team-documentary
@@ -18,8 +19,44 @@ jobs:
         with:
           node-version: '22'
       - uses: oven-sh/setup-bun@v2
-      - run: mkdir -p public/portraits && curl -fL 'https://commons.wikimedia.org/wiki/Special:Redirect/file/George_Soros.jpg' -o public/portraits/soros.jpg
-      - run: test -s public/portraits/druckenmiller.jpg || (echo 'Licensed Druckenmiller photograph required' && exit 1)
+      - name: Download authentic licensed portraits
+        shell: bash
+        run: |
+          mkdir -p public/portraits
+          curl -fL --retry 3 --user-agent 'Mozilla/5.0' 'https://commons.wikimedia.org/wiki/Special:Redirect/file/George_Soros.jpg' -o public/portraits/soros.jpg
+          python3 - <<'PY'
+          import re, html, urllib.request, urllib.parse, pathlib
+          page='https://spxarena.com/investors/druckenmiller/'
+          req=urllib.request.Request(page,headers={'User-Agent':'Mozilla/5.0'})
+          source=urllib.request.urlopen(req,timeout=30).read().decode('utf-8','replace')
+          candidates=[]
+          for tag in re.findall(r'<(?:img|meta|source)\b[^>]+>',source,re.I):
+              if re.search(r'druckenmiller|portrait|og:image',tag,re.I):
+                  candidates += re.findall(r'(?:src|content|srcset)=["\x27]([^"\x27]+)',tag,re.I)
+          candidates += re.findall(r'https?[^"\x27<> ]+druckenmiller[^"\x27<> ]+\.(?:webp|jpg|jpeg|png)',source,re.I)
+          candidates=[urllib.parse.urljoin(page,html.unescape(x.split(' ')[0])) for x in candidates]
+          candidates=[x for x in candidates if re.search(r'\.(?:webp|jpg|jpeg|png)(?:\?|$)',x,re.I)]
+          print('Portrait candidates:',len(candidates))
+          for url in candidates:
+              try:
+                  req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0','Referer':page})
+                  data=urllib.request.urlopen(req,timeout=30).read()
+                  if len(data)<12000:continue
+                  magic=data[:12]
+                  if magic.startswith(b'\xff\xd8'):suffix='.jpg'
+                  elif magic.startswith(b'\x89PNG'):suffix='.png'
+                  elif magic.startswith(b'RIFF') and b'WEBP' in magic:suffix='.webp'
+                  else:continue
+                  dest=pathlib.Path('public/portraits/druckenmiller'+suffix)
+                  dest.write_bytes(data)
+                  print('Downloaded verified image:',url,len(data))
+                  break
+              except Exception as e: print('Skipping candidate:',str(e)[:100])
+          else:
+              raise SystemExit('No verified portrait downloaded from licensed source')
+          PY
+          test -s public/portraits/soros.jpg
+          ls -lh public/portraits
       - run: bun i
       - run: bun run build
       - run: bun run render
@@ -28,3 +65,4 @@ jobs:
           name: SorosAndTeam1992-MP4
           path: soros-team-documentary/out/SorosAndTeam1992.mp4
           if-no-files-found: error
+          retention-days: 30

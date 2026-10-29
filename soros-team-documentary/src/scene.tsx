@@ -9,7 +9,7 @@ const path=points.map(([x,y],i)=>(i?'L':'M')+x+' '+y).join(' ');
 return <AbsoluteFill style={{background:'#080B10',color:'#fff',fontFamily:'Arial,sans-serif'}}>
 <div style={{position:'absolute',top:40,width:'100%',textAlign:'center',fontSize:64,fontWeight:900,color:'#D4AF37'}}>SOROS ET SON ÉQUIPE</div>
 <div style={{opacity:1-room}}>
-{['soros.jpg','druckenmiller.jpg'].map((file,i)=><div key={file} style={{position:'absolute',left:i?1030:team?250:655,top:155,width:600,height:600,opacity:i?team:1,overflow:'hidden',border:'3px solid #D4AF37'}}>
+{['soros.jpg','druckenmiller.webp'].map((file,i)=><div key={file} style={{position:'absolute',left:i?1030:team?250:655,top:155,width:600,height:600,opacity:i?team:1,overflow:'hidden',border:'3px solid #D4AF37'}}>
 <Img src={staticFile('portraits/'+file)} style={{width:'100%',height:'100%',objectFit:'cover',filter:'grayscale(.7) sepia(.3)'}}/>
 <div style={{position:'absolute',bottom:0,background:'#080B10dd',width:'100%',textAlign:'center',padding:'20px 0',fontSize:36,fontWeight:900}}>{i?'STANLEY DRUCKENMILLER':'GEORGE SOROS'}</div></div>)}
 <svg width="1920" height="1080" style={{position:'absolute',inset:0}}>
