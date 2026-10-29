@@ -24,11 +24,11 @@ jobs:
         include:
           - folder: 17-apres-la-crise
             composition: ApresLaCrise17
-            artifact: AXIOME-17-17-apres-la-crise-MP4
+            artifact: AXIOME-17-apres-la-crise-MP4
             output: 17_Apres_La_Crise.mp4
           - folder: 18-ce-qui-na-pas-tenu
             composition: CeQuiNaPasTenu18
-            artifact: AXIOME-18-18-ce-qui-na-pas-tenu-MP4
+            artifact: AXIOME-18-ce-qui-na-pas-tenu-MP4
             output: 18_Ce_Qui_Na_Pas_Tenu.mp4
           - folder: 11-la-banque-achete
             composition: LaBanqueAchete11
@@ -59,7 +59,7 @@ jobs:
         working-directory: ${{ matrix.folder }}
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - uses: oven-sh/setup-bun@v2
