@@ -30,28 +30,31 @@ for key,name in sources.items():
  im.save('public/archive/'+key+'.jpg',quality=92)
  print(key,im.size,url)
  time.sleep(5)
-# Geographically sourced outlines: Natural Earth GeoJSON dataset, reprojected into a flat map plane.
+# True Natural Earth country borders; Shapely clips polygons without corrupting coastlines.
+from shapely.geometry import shape,box,Polygon
+from shapely.validation import make_valid
 geo=json.loads(get('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson'))
+region=box(-12,34,36,72)
 result=[]
 for feature in geo['features']:
- props=feature['properties'];id=props.get('ISO3166-1-Alpha-3') or props.get('ISO_A3') or props.get('ADM0_A3') or ''
- geom=feature.get('geometry') or {};typ=geom.get('type');coords=geom.get('coordinates') or []
- polys=[coords] if typ=='Polygon' else coords if typ=='MultiPolygon' else []
- processed=[]
- for polygon in polys:
-  ring=polygon[0] if polygon else []
-  if not ring:continue
-  # avoid far-off overseas islands and regions, keep geographic Europe
-  points=[[round((lon-13)*.44,3),round((lat-51)*.55,3)] for lon,lat in ring if -12<=lon<=36 and 34<=lat<=72]
-  if len(points)>=3:
-   # remove duplicate consecutive coordinates
-   dedup=[]
-   for xy in points:
-    if not dedup or dedup[-1]!=xy:dedup.append(xy)
-   if len(dedup)>=3:processed.append(dedup[::max(1,len(dedup)//220)])
- if processed:result.append({'id':id,'polygons':processed})
-assert len(result)>25, 'Map geometry missing'
-assert all(any(c['id']==x for c in result) for x in ['DNK','ITA','FRA','NLD']), 'Country identifiers missing'
+ props=feature['properties']
+ iso=props.get('ISO3166-1-Alpha-3') or props.get('ISO_A3') or props.get('ADM0_A3') or ''
+ geom=feature.get('geometry')
+ if not geom:continue
+ raw=make_valid(shape(geom))
+ if not raw.intersects(region):continue
+ clipped=raw.intersection(region)
+ pieces=list(clipped.geoms) if hasattr(clipped,'geoms') else [clipped]
+ polys=[]
+ for piece in pieces:
+  if not isinstance(piece,Polygon) or piece.area<.008:continue
+  piece=piece.simplify(.012,preserve_topology=True)
+  ring=list(piece.exterior.coords)
+  pts=[[round((lon-12)*.43,4),round((lat-52)*.43,4)] for lon,lat in ring[:-1]]
+  if len(pts)>=3:polys.append(pts)
+ if polys:result.append({'id':iso,'polygons':polys})
+assert len(result)>25,'Europe map missing'
+assert all(any(c['id']==x for c in result) for x in ['DNK','ITA','FRA','NLD']), 'Country IDs missing'
 with open('src/europe-data.ts','w') as out:
  out.write('export const countries: {id:string;polygons:number[][][]}[] = '+json.dumps(result,separators=(',',':'))+';\n')
-print('Prepared',len(result),'European countries')
+print('Accurate European countries:',len(result))

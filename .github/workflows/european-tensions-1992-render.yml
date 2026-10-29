@@ -21,7 +21,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - name: Prepare verified archival photographs and geographical map
         run: |
-          python3 -m pip install --quiet pillow --break-system-packages
+          python3 -m pip install --quiet pillow shapely --break-system-packages
           python3 scripts/prepare_assets.py
       - run: bun i
       - run: bun run build
