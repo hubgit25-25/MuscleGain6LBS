@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill,Easing,interpolate,spring,useCurrentFrame,useVideoConfig} from 'remotion';
+import {AbsoluteFill,Easing,interpolate,spring,staticFile,useCurrentFrame,useVideoConfig} from 'remotion';
 const cl={extrapolateLeft:'clamp' as const,extrapolateRight:'clamp' as const};
 const ease=(f:number,a:number,b:number)=>interpolate(f,[a,b],[0,1],{...cl,easing:Easing.inOut(Easing.cubic)});
 const palette={gold:'#D4AF37',red:'#FF3B30',black:'#080B10'};
@@ -45,7 +45,7 @@ export const CostOfInterestRates:React.FC=()=>{
  <AbsoluteFill style={{background:'radial-gradient(ellipse at 50% 55%,#2c2416,transparent 70%)'}}/>
  <div style={{position:'absolute',inset:0,opacity:(1-disappear)*appear,transform:'scale('+push+')'}}>
  {scenes.map((s,i)=><div key={s.name} style={{position:'absolute',left:45+i*625,top:160,width:590,height:710,overflow:'hidden',border:'2px solid #9e7d3a',boxShadow:'0 0 45px #000b'}}>
- <img src={require('remotion').staticFile('environments/'+s.image)} style={{width:'100%',height:'100%',objectFit:'cover',filter:'contrast(1.13) saturate(.75) brightness(.78)',transform:'scale('+(1.07+f*.00015)+')'}}/>
+ <img src={staticFile('environments/'+s.image)} style={{width:'100%',height:'100%',objectFit:'cover',filter:'contrast(1.13) saturate(.75) brightness(.78)',transform:'scale('+(1.07+f*.00015)+')'}}/>
  <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg,#080B1077,transparent 48%,#080B10e8)'}}/>
  <div style={{position:'absolute',bottom:27,left:0,width:'100%',textAlign:'center',fontSize:33,fontWeight:900,letterSpacing:5,color:'#fff'}}>{s.name}</div>
  </div>)}
