@@ -24,6 +24,7 @@ jobs:
         run: |
           mkdir -p public/portraits
           curl -fL --retry 3 --user-agent 'Mozilla/5.0' 'https://commons.wikimedia.org/wiki/Special:Redirect/file/George_Soros.jpg' -o public/portraits/soros.jpg
+          python3 -m pip install --quiet pillow --break-system-packages
           python3 - <<'PY'
           import re, html, urllib.request, urllib.parse, pathlib
           page='https://spxarena.com/investors/druckenmiller/'
@@ -47,8 +48,10 @@ jobs:
                   elif magic.startswith(b'\x89PNG'):suffix='.png'
                   elif magic.startswith(b'RIFF') and b'WEBP' in magic:suffix='.webp'
                   else:continue
-                  dest=pathlib.Path('public/portraits/druckenmiller'+suffix)
-                  dest.write_bytes(data)
+                  import io
+                  from PIL import Image
+                  dest=pathlib.Path('public/portraits/druckenmiller.jpg')
+                  Image.open(io.BytesIO(data)).convert('RGB').save(dest,quality=92)
                   print('Downloaded verified image:',url,len(data))
                   break
               except Exception as e: print('Skipping candidate:',str(e)[:100])
