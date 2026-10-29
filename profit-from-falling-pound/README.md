@@ -1,7 +1,7 @@
-# Gagner à la baisse
+# Gagner à la baisse — version 3D
 
-Motion design Remotion pédagogique, 8 s, 1920×1080, 60 fps, 480 frames, H.264 MP4.
+8 secondes, 1920×1080, 60 FPS, 480 frames, H.264 MP4. **Real WebGL 3D geometry** using Three.js and @remotion/three: rotating gold metal coins with physical materials, three-dimensional scene, camera, lights, shadows/reflections. Exact typographic overlays are retained for numerical fidelity: 100 £ → 300 DEM → 250 DEM → +50 DEM, then upward red curve and PERTE POSSIBLE. EXEMPLE FICTIF remains visible throughout.
 
-Storyboard: 100 £ → 300 DEM → 250 DEM → +50 DEM, puis scénario inverse avec flèche rouge ascendante et PERTE POSSIBLE. Le cartouche EXEMPLE FICTIF reste visible. Les 250 DEM correspondent au coût fictif de rachat de 100 £ après baisse de la livre. Les +50 DEM sont un gain brut fictif hors frais, spreads, intérêts et coûts d'emprunt. Une hausse inverse de la livre augmenterait le coût du rachat, créant une perte possible. Aucun taux historique n'est affirmé.
+The GBP/DEM amounts are fictitious and not historical exchange-rate data. +50 DEM is illustrative gross gain, before costs. The inverse price movement can cause losses. No generated photographs or synthetic historical footage.
 
-`bun i && bun run build && bun run render` produit `out/ProfitFromFallingPound.mp4`. Le workflow GitHub Actions publie l'artifact `ProfitFromFallingPound-MP4`.
+Build: `bun i && bun run build`. Render: `bun run render`. GitHub Actions artifact: ProfitFromFallingPound-MP4.

@@ -1,51 +1,45 @@
 import React from 'react';
 import {AbsoluteFill,Easing,interpolate,useCurrentFrame} from 'remotion';
-const GOLD='#D4AF37',RED='#FF3B30',BG='#080B10';
-const opts={extrapolateLeft:'clamp' as const,extrapolateRight:'clamp' as const};
-const progress=(f:number,a:number,b:number)=>interpolate(f,[a,b],[0,1],{...opts,easing:Easing.inOut(Easing.cubic)});
-const Label:React.FC<{value:string;color?:string;size?:number}>=({value,color='#fff',size=104})=><span style={{fontSize:size,fontWeight:900,color,letterSpacing:1,textShadow:'0 5px 26px #000c'}}>{value}</span>;
+import {ThreeCanvas} from '@remotion/three';
+import {useFrame} from '@react-three/fiber';
+import * as THREE from 'three';
+const gold='#D4AF37',red='#FF3B30';
+const clamp={extrapolateLeft:'clamp' as const,extrapolateRight:'clamp' as const};
+const rise=(f:number,a:number,b:number)=>interpolate(f,[a,b],[0,1],{...clamp,easing:Easing.inOut(Easing.cubic)});
+const Coin:React.FC<{position:[number,number,number];index:number;frame:number;color:string}>=({position,index,frame,color})=><group position={position} rotation={[Math.PI/2+.16,frame*.013+index*.6,Math.sin(frame*.015+index)*.16]}>
+ <mesh><cylinderGeometry args={[.68,.68,.14,64]}/><meshStandardMaterial color={color} metalness={.9} roughness={.16}/></mesh>
+ <mesh position={[0,.077,0]} rotation={[-Math.PI/2,0,0]}><torusGeometry args={[.52,.028,12,64]}/><meshStandardMaterial color="#ffe8a3" metalness={.95} roughness={.13}/></mesh>
+ <mesh position={[0,-.077,0]} rotation={[Math.PI/2,0,0]}><torusGeometry args={[.52,.028,12,64]}/><meshStandardMaterial color="#ffe8a3" metalness={.95} roughness={.13}/></mesh>
+ </group>;
+const Stage:React.FC<{f:number;loss:boolean}>=({f,loss})=><ThreeCanvas width={1920} height={1080} orthographic camera={{position:[0,3,16],zoom:65,near:.1,far:100}}>
+ <ambientLight intensity={.65}/><directionalLight position={[-6,9,8]} intensity={4} color="#fff3d4"/><pointLight position={[6,3,3]} intensity={85} color={loss?'#ff4433':'#D4AF37'}/><pointLight position={[-6,-3,5]} intensity={60} color="#6688aa"/>
+ <mesh position={[0,-6,-2]} rotation={[-Math.PI/2,0,0]}><planeGeometry args={[60,60]}/><meshStandardMaterial color="#10151b" metalness={.7} roughness={.25}/></mesh>
+ {Array.from({length:16},(_,i)=><Coin key={i} position={[(i%8-3.5)*2.35,Math.sin(f*.025+i)*.45-2.2,Math.floor(i/8)*-1.5-1]} index={i} frame={f} color={loss?'#a93835':gold}/>)}
+ {Array.from({length:22},(_,i)=><mesh key={'p'+i} position={[(i%11-5)*2.1,3.5+Math.sin(f*.012+i)*.8,-4-Math.floor(i/11)]}><sphereGeometry args={[.035,8,8]}/><meshBasicMaterial color={loss?'#ff3b30':'#D4AF37'}/></mesh>)}
+ </ThreeCanvas>;
+const Text:React.FC<{children:React.ReactNode;color?:string;size?:number}>=({children,color='#fff',size=120})=><span style={{fontSize:size,fontWeight:900,letterSpacing:2,color,textShadow:'0 8px 0 #15171a,0 13px 0 #303030,0 25px 35px #000',WebkitTextStroke:'1px #ffffff22'}}>{children}</span>;
 export const ProfitFromFallingPound:React.FC=()=>{
- const f=useCurrentFrame(),initial=progress(f,10,48),sale=progress(f,58,112),buy=progress(f,137,198),gain=progress(f,208,279),reverse=progress(f,303,351),loss=progress(f,369,426);
- const firstFade=1-progress(f,294,327);
- const downPts=Array.from({length:70},(_,i)=>[i*14,100+i*5+Math.sin(i*.28)*16]);
- const upPts=Array.from({length:70},(_,i)=>[i*14,425-i*5+Math.sin(i*.28)*15]);
- const line=(pts:number[][])=>pts.map(([x,y],i)=>(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)).join(' ');
- const barOpacity=progress(f,12,45);
- return <AbsoluteFill style={{background:BG,color:'#fff',fontFamily:'Arial,Helvetica,sans-serif',overflow:'hidden'}}>
- <AbsoluteFill style={{background:'radial-gradient(ellipse at 50% 55%,#242019 0%,#080B10 70%)'}}/>
- <div style={{position:'absolute',top:62,left:0,width:'100%',textAlign:'center',fontSize:54,fontWeight:900,letterSpacing:8,color:'#f6f6f6'}}>GAGNER À LA BAISSE</div>
- <div style={{position:'absolute',top:145,left:0,width:'100%',textAlign:'center',fontSize:25,letterSpacing:5,color:GOLD}}>VENTE À DÉCOUVERT · EXEMPLE PÉDAGOGIQUE</div>
- <svg width="1920" height="1080" style={{position:'absolute',inset:0,pointerEvents:'none'}}>
- {Array.from({length:10},(_,i)=><line key={'h'+i} x1="120" x2="1800" y1={245+i*68} y2={245+i*68} stroke={GOLD} opacity=".065"/>)}
- {Array.from({length:15},(_,i)=><line key={'v'+i} x1={140+i*120} x2={140+i*120} y1="245" y2="860" stroke={GOLD} opacity=".055"/>)}
- <g opacity={barOpacity*firstFade}><line x1="285" y1="778" x2="1625" y2="778" stroke={GOLD} strokeWidth="4" opacity=".5"/>
- {[410,960,1500].map((x,i)=><circle key={i} cx={x} cy="778" r="12" fill={GOLD}/>)}</g>
+ const f=useCurrentFrame(),a=rise(f,5,45),b=rise(f,55,102),c=rise(f,134,191),d=rise(f,208,270),reverse=rise(f,300,345),danger=rise(f,370,425),before=1-rise(f,290,330);
+ const points=Array.from({length:55},(_,i)=>[i*18,reverse?420-i*6+Math.sin(i*.25)*15:90+i*6+Math.sin(i*.25)*15]);
+ const path=points.map(([x,y],i)=>(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)).join(' ');
+ return <AbsoluteFill style={{background:'#080B10',fontFamily:'Arial,Helvetica,sans-serif',color:'#fff',overflow:'hidden'}}>
+ <Stage f={f} loss={f>=315}/>
+ <AbsoluteFill style={{background:'linear-gradient(90deg,#080B10ad,transparent 50%,#080B10ad)',pointerEvents:'none'}}/>
+ <div style={{position:'absolute',top:62,width:'100%',textAlign:'center',fontSize:55,fontWeight:900,letterSpacing:9,textShadow:'0 8px 25px #000'}}>GAGNER À LA BAISSE</div>
+ <div style={{position:'absolute',top:144,width:'100%',textAlign:'center',fontSize:25,letterSpacing:5,color:gold,textShadow:'0 3px 12px #000'}}>VENTE À DÉCOUVERT</div>
+ <div style={{position:'absolute',left:130,top:285,width:1660,height:475,opacity:before,transform:'perspective(1400px) rotateX(6deg)'}}>
+ <div style={{display:'flex',justifyContent:'space-around',alignItems:'center',height:180,opacity:a}}>
+ <Text>100 £</Text><span style={{opacity:b}}><Text color={gold} size={100}>→</Text></span><span style={{opacity:b}}><Text color={gold}>300 DEM</Text></span>
+ </div>
+ <div style={{marginTop:25,textAlign:'center',opacity:c,transform:'translateY('+((1-c)*40)+'px)'}}><Text size={79}>300 DEM → 250 DEM</Text></div>
+ <div style={{marginTop:28,textAlign:'center',opacity:d,transform:'scale('+(.75+d*.25)+')'}}><Text color={gold} size={146}>+50 DEM</Text></div>
+ </div>
+ <div style={{position:'absolute',inset:0,opacity:reverse,background:'radial-gradient(ellipse at 50% 50%,#450e14aa,transparent 65%)'}}/>
+ <svg width="1170" height="550" style={{position:'absolute',left:380,top:255,opacity:reverse,filter:'drop-shadow(0 0 14px #FF3B30)'}}>
+ <defs><clipPath id="clipUp"><rect width={1020*rise(f,320,425)} height="550"/></clipPath></defs>
+ <g clipPath="url(#clipUp)"><path d={path} stroke={red} strokeWidth="13" strokeLinecap="round" strokeLinejoin="round" fill="none"/></g>
  </svg>
- <div style={{position:'absolute',left:160,top:340,width:1600,display:'flex',alignItems:'center',justifyContent:'space-around',opacity:firstFade}}>
- <div style={{opacity:initial,transform:'translateY('+(1-initial)*60+'px)'}}><Label value="100 £"/></div>
- <div style={{opacity:sale,transform:'scale('+(.75+.25*sale)+')'}}><Label value="→" color={GOLD} size={95}/></div>
- <div style={{opacity:sale,transform:'translateY('+(1-sale)*60+'px)'}}><Label value="300 DEM" color={GOLD}/></div>
- </div>
- <div style={{position:'absolute',top:535,width:'100%',display:'flex',alignItems:'center',justifyContent:'center',gap:60,opacity:buy*firstFade}}>
- <Label value="300 DEM" color={GOLD} size={70}/><Label value="→" color="#fff" size={64}/><Label value="250 DEM" size={70}/>
- </div>
- <div style={{position:'absolute',top:650,width:'100%',textAlign:'center',opacity:gain*firstFade,transform:'scale('+(.7+.3*gain)+')'}}>
- <Label value="+50 DEM" color={GOLD} size={150}/>
- </div>
- <svg style={{position:'absolute',left:430,top:630,opacity:gain*firstFade*.45}} width="1060" height="380">
- <defs><clipPath id="fallReveal"><rect width={980*gain} height="380"/></clipPath></defs>
- <g clipPath="url(#fallReveal)"><path d={line(downPts)} stroke={GOLD} strokeWidth="7" fill="none"/></g>
- </svg>
- <div style={{position:'absolute',inset:0,opacity:reverse,background:'radial-gradient(ellipse at center,#281014 0%,transparent 72%)'}}/>
- <svg width="1100" height="560" style={{position:'absolute',left:410,top:280,opacity:reverse}}>
- <defs><clipPath id="riseReveal"><rect width={1020*progress(f,320,421)} height="560"/></clipPath></defs>
- <g clipPath="url(#riseReveal)"><path d={line(upPts)} stroke={RED} strokeWidth="12" strokeLinecap="round" fill="none" style={{filter:'drop-shadow(0 0 14px #FF3B30)'}}/></g>
- <path d="M1000 68 L1038 0 L1075 68Z" fill={RED} opacity={progress(f,407,439)}/>
- </svg>
- <div style={{position:'absolute',top:735,width:'100%',textAlign:'center',opacity:loss,transform:'scale('+(.85+.15*loss)+')'}}>
- <Label value="PERTE POSSIBLE" color={RED} size={91}/>
- </div>
- <div style={{position:'absolute',bottom:40,right:65,padding:'12px 26px',background:'#171c22',border:'2px solid #D4AF37',borderRadius:6,fontSize:27,fontWeight:800,letterSpacing:2,color:'#f5e3b2'}}>EXEMPLE FICTIF</div>
- <AbsoluteFill style={{pointerEvents:'none',boxShadow:'inset 0 0 145px #000a'}}/>
+ <div style={{position:'absolute',top:770,width:'100%',textAlign:'center',opacity:danger,transform:'perspective(900px) rotateX('+(10-danger*10)+'deg)'}}><Text color={red} size={104}>PERTE POSSIBLE</Text></div>
+ <div style={{position:'absolute',right:52,bottom:42,padding:'16px 30px',border:'2px solid #D4AF37',background:'#080B10e8',fontSize:30,fontWeight:900,letterSpacing:3,color:'#fff'}}>EXEMPLE FICTIF</div>
  </AbsoluteFill>;
 };
