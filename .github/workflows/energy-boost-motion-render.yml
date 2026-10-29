@@ -1,0 +1,30 @@
+name: Render EnergyBoostMotion
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'energy-boost-motion/**'
+      - '.github/workflows/energy-boost-motion-render.yml'
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: energy-boost-motion
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: oven-sh/setup-bun@v2
+      - run: bun i
+      - run: bun run build
+      - run: bun run render
+      - uses: actions/upload-artifact@v4
+        with:
+          name: EnergyBoostMotion-MP4
+          path: energy-boost-motion/out/EnergyBoostMotion.mp4
+          if-no-files-found: error
+          retention-days: 30
