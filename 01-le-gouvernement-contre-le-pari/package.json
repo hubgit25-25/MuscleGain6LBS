@@ -1,0 +1,21 @@
+{
+  "name": "01-le-gouvernement-contre-le-pari",
+  "private": true,
+  "scripts": {
+    "build": "tsc --noEmit && remotion compositions src/index.tsx",
+    "render": "remotion render src/index.tsx GovernmentVsBet01 out/01_Le_Gouvernement_Contre_Le_Pari_16x9.mp4 --codec h264 --crf 18 --concurrency 2 && remotion render src/index.tsx GovernmentVsBet01Short out/01_Le_Gouvernement_Contre_Le_Pari_Short_9x16.mp4 --codec h264 --crf 18 --concurrency 2"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.370",
+    "@remotion/google-fonts": "4.0.370",
+    "@remotion/media-utils": "4.0.370",
+    "remotion": "4.0.370",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "typescript": "5.8.3"
+  }
+}
