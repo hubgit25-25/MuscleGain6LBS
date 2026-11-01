@@ -4,8 +4,6 @@ import {
   Audio,
   Composition,
   Sequence,
-  calculateMetadata,
-  getAudioDurationInSeconds,
   interpolate,
   registerRoot,
   spring,
@@ -13,6 +11,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
+import {getAudioDurationInSeconds} from '@remotion/media-utils';
 import {loadFont} from '@remotion/google-fonts/SpaceGrotesk';
 
 const {fontFamily} = loadFont('normal', {weights: ['400', '500', '600', '700']});
@@ -122,6 +121,7 @@ const Horloge: React.FC = () => {
         <Titre size={portrait ? 48 : 76} color={GOLD}>16 SEPTEMBRE 1992</Titre>
       </div>
       <div style={{opacity: announcedOpacity, fontFamily, fontSize: portrait ? 29 : 38, color: IVORY, fontWeight: 600, textAlign: 'center', padding: '0 8%'}}>15 % annoncé pour le lendemain</div>
+      <Etiquette style={{position: 'absolute', bottom: '7%', color: MUTED}}>SCHÉMA EXPLICATIF</Etiquette>
     </AbsoluteFill>
   );
 };
@@ -155,9 +155,9 @@ const Frise: React.FC = () => <div style={{height: 2, width: '100%', background:
 const Carte: React.FC<{label: string}> = ({label}) => <div style={{border: '1px solid '+GOLD, padding: 20, color: IVORY, fontFamily}}>{label}</div>;
 
 const MainVideo: React.FC = () => {
-  const {width, height} = useVideoConfig();
-  const isShort = height > width;
-  const durations = [252, 180, 144, 144];
+  const {durationInFrames} = useVideoConfig();
+  const frame = useCurrentFrame();
+  const durations = [Math.round(durationInFrames * 0.35), Math.round(durationInFrames * 0.25), Math.round(durationInFrames * 0.20), durationInFrames - Math.round(durationInFrames * 0.80)];
   return (
     <AbsoluteFill style={{background: BG, color: IVORY, fontFamily, overflow: 'hidden'}}>
       <Sequence from={0} durationInFrames={durations[0]}><Couloir/></Sequence>
@@ -167,15 +167,15 @@ const MainVideo: React.FC = () => {
       {AUDIO_SRC ? <Audio src={staticFile(AUDIO_SRC)} volume={(f) => interpolate(f, [0, 12, 708, 720], [0, 1, 1, 0], clamp)}/> : null}
       {MUSIC_SRC ? <Audio src={staticFile(MUSIC_SRC)} volume={(f) => 0.08 * interpolate(f, [0, 24, 696, 720], [0, 1, 1, 0], clamp)}/> : null}
       <div style={{position: 'absolute', left: '8%', right: '8%', bottom: '3%', height: 2, background: 'rgba(198,161,91,.18)'}}>
-        <div style={{height: '100%', width: '100%', background: GOLD, transformOrigin: 'left', transform: `scaleX(${interpolate(useCurrentFrame(), [0, 720], [0, 1], clamp)})`}}/>
+        <div style={{height: '100%', width: '100%', background: GOLD, transformOrigin: 'left', transform: `scaleX(${interpolate(frame, [0, durationInFrames], [0, 1], clamp)})`}}/>
       </div>
     </AbsoluteFill>
   );
 };
 
-const metadata = async ({props}: {props: Record<string, unknown>}) => {
+const metadata = async () => {
   const durationInSeconds = AUDIO_SRC ? await getAudioDurationInSeconds(staticFile(AUDIO_SRC)) : DEFAULT_DURATION;
-  return {durationInFrames: Math.round(durationInSeconds * FPS), props};
+  return {durationInFrames: Math.round(durationInSeconds * FPS)};
 };
 
 const Root: React.FC = () => (
