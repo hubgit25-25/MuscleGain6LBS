@@ -22,7 +22,7 @@ const PhotoScene:React.FC<{src:string;name:string;subtitle:string;start:number;e
  const opacity=interpolate(f,[start,start+12,end-8,end],[0,1,1,0],clamp);
  const zoom=interpolate(local,[0,end-start],[1.08,1.2],clamp);
  return <AbsoluteFill style={{opacity,background:'#080B10'}}>
-  <Img src={src} onError={()=>{}} style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:position,transform:`scale(${zoom}) translateX(${(1-enter)*65}px)`,filter:'contrast(1.08) saturate(.72) brightness(.66)'}}/>
+  <Img src={src} style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:position,transform:`scale(${zoom}) translateX(${(1-enter)*65}px)`,filter:'contrast(1.08) saturate(.72) brightness(.66)'}}/>
   <AbsoluteFill style={{background:'linear-gradient(90deg,rgba(4,7,12,.9),rgba(4,7,12,.24) 65%,rgba(4,7,12,.55)),linear-gradient(0deg,#05070b 0%,transparent 58%)'}}/>
   <div style={{position:'absolute',left:150,bottom:170,opacity:enter,transform:`translateY(${(1-enter)*25}px)`}}>
    <div style={{fontFamily:'Arial',fontSize:23,letterSpacing:8,color:GOLD,fontWeight:700,marginBottom:18}}>AXIOME / BLACK WEDNESDAY</div>
