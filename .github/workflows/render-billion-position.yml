@@ -1,0 +1,27 @@
+name: Render Billion Dollar Position
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'src/billion-dollar-position.tsx'
+      - 'src/root.tsx'
+      - 'package.json'
+      - '.github/workflows/render-billion-position.yml'
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: bun run typecheck
+      - run: bun run build
+      - run: bun run test-position
+      - run: bun run render-position
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BillionDollarPosition-MP4
+          path: out/BillionDollarPosition.mp4
+          if-no-files-found: error
+          retention-days: 30
