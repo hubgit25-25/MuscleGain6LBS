@@ -8,9 +8,9 @@ const clamp = {extrapolateLeft:'clamp' as const, extrapolateRight:'clamp' as con
 
 // Documentary photo references. Wikimedia file pages are used for the portraits;
 // the trading-floor image is credited to the London Museum (CC BY-NC 4.0).
-const DRUCKENMILLER = 'https://commons.wikimedia.org/wiki/Special:FilePath/Stanley_Druckenmiller.jpg';
-const SOROS = 'https://commons.wikimedia.org/wiki/Special:FilePath/George_Soros%2C_2002.jpg';
-const FLOOR = 'https://collections.londonmuseum.net/download/59/672/download_HG2566_07.jpg';
+const DRUCKENMILLER = 'https://www.bowdoin.edu/news/2017/images/druckenmiller-02.jpg';
+const SOROS = 'https://upload.wikimedia.org/wikipedia/commons/1/14/George_Soros%2C_2002.jpg';
+const FLOOR = 'https://collections.londonmuseum.net/download/996/937/download_2025_01_24_11_34_0019.jpg';
 
 const Grain:React.FC=()=> <div style={{position:'absolute',inset:0,opacity:.12,pointerEvents:'none',backgroundImage:'repeating-linear-gradient(0deg,transparent 0px,transparent 3px,#fff 4px)',mixBlendMode:'soft-light'}}/>;
 
