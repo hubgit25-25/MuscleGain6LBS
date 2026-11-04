@@ -2,6 +2,8 @@ import React from 'react';
 import {
   AbsoluteFill,
   Audio,
+  Img,
+  Easing,
   Composition,
   Sequence,
   interpolate,
@@ -52,6 +54,29 @@ const Pictogramme: React.FC<{type: 'shield' | 'down'; size: number}> = ({type, s
     )}
   </svg>
 );
+
+
+export const Scene01: React.FC = () => {
+  const frame = useCurrentFrame();
+  const {width, height} = useVideoConfig();
+  const portrait = height > width;
+  const progress = interpolate(frame, [0, 60], [0, 1], {...clamp, easing: Easing.inOut(Easing.ease)});
+  const zoom = interpolate(frame, [0, 240], [1, 1.13], clamp);
+  const titleOpacity = interpolate(frame, [15, 40], [0, 1], clamp);
+  const lineWidth = interpolate(frame, [30, 100], [0, 100], clamp);
+  return (
+    <AbsoluteFill style={{backgroundColor: BG}}>
+      <AbsoluteFill style={{transform: `scale(${zoom})`, overflow: 'hidden'}}>
+        <Img src={staticFile('images/scene-01.png')} style={{width: '100%', height: '100%', objectFit: 'cover'}}/>
+      </AbsoluteFill>
+      <AbsoluteFill style={{background: 'linear-gradient(90deg, rgba(0,0,0,.58), rgba(0,0,0,.08))', opacity: titleOpacity}}/>
+      <div style={{position: 'absolute', left: '8%', bottom: '12%', width: `${lineWidth}%`, maxWidth: '84%', height: 3, backgroundColor: GOLD, boxShadow: '0 0 15px '+GOLD}}/>
+      <div style={{position: 'absolute', bottom: '5%', right: '8%', color: GOLD, fontSize: portrait ? 16 : 22, fontFamily, opacity: titleOpacity, letterSpacing: '0.12em'}}>AXIOME • 01 / 18</div>
+      <div style={{position: 'absolute', top: '8%', left: '8%', opacity: progress, color: IVORY, fontFamily, fontSize: portrait ? 16 : 22, letterSpacing: '0.18em'}}>LE GOUVERNEMENT CONTRE LE PARI</div>
+      <Etiquette style={{position: 'absolute', top: '12%', right: '8%', fontSize: portrait ? 12 : 16, color: IVORY}}>ILLUSTRATION</Etiquette>
+    </AbsoluteFill>
+  );
+};
 
 const Couloir: React.FC = () => {
   const frame = useCurrentFrame();
@@ -160,7 +185,8 @@ const MainVideo: React.FC = () => {
   const durations = [Math.round(durationInFrames * 0.35), Math.round(durationInFrames * 0.25), Math.round(durationInFrames * 0.20), durationInFrames - Math.round(durationInFrames * 0.80)];
   return (
     <AbsoluteFill style={{background: BG, color: IVORY, fontFamily, overflow: 'hidden'}}>
-      <Sequence from={0} durationInFrames={durations[0]}><Couloir/></Sequence>
+      <Sequence from={0} durationInFrames={Math.round(durations[0] * 0.36)}><Scene01/></Sequence>
+      <Sequence from={Math.round(durations[0] * 0.36)} durationInFrames={durations[0] - Math.round(durations[0] * 0.36)}><Couloir/></Sequence>
       <Sequence from={durations[0]} durationInFrames={durations[1]}><Position/></Sequence>
       <Sequence from={durations[0]+durations[1]} durationInFrames={durations[2]}><Horloge/></Sequence>
       <Sequence from={durations[0]+durations[1]+durations[2]} durationInFrames={durations[3]}><Balance/></Sequence>
