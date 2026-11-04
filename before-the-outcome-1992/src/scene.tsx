@@ -37,6 +37,7 @@ export const BeforeTheOutcome1992:React.FC=()=>{
  const branches=[{name:'BAISSE DE LA LIVRE',color:GOLD},{name:'DÉFENSE RÉUSSIE',color:RED},{name:'ATTENTE PROLONGÉE',color:BLUE}];
  return <AbsoluteFill style={{background:'#080B10',color:'#fff',fontFamily:'Arial,Helvetica,sans-serif',overflow:'hidden'}}>
  <Environment f={f}/>
+ <img src="https://images.prismic.io/nyse-etf-central/ZoelfR5LeNNTwz2K_man-sits-front-multiple-monitors-displaying-stock-market-data-analyzing-financial-trends-1-.jpg" alt="Trader observing financial charts" style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',opacity:.92}}/>
  <AbsoluteFill style={{background:'linear-gradient(90deg,#080B10aa,#080B1022,#080B10aa)'}}/>
  <div style={{position:'absolute',top:58,width:'100%',textAlign:'center',fontSize:54,fontWeight:900,letterSpacing:7,textShadow:'0 7px 24px #000'}}>AVANT DE CONNAÎTRE LE RÉSULTAT</div>
  <div style={{position:'absolute',left:140,top:242,width:1640,height:610,opacity:branch*fade,background:'#080B10ed',border:'3px solid #D4AF37',boxShadow:'0 0 65px #000',transform:'perspective(1500px) rotateX('+(4-4*branch)+'deg)'}}>
