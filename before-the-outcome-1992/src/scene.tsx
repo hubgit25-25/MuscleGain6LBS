@@ -2,7 +2,7 @@ import React from 'react';
 import {AbsoluteFill,Easing,interpolate,useCurrentFrame} from 'remotion';
 import {ThreeCanvas} from '@remotion/three';
 import * as THREE from 'three';
-const GOLD='#D4AF37',RED='#FF3B30',BLUE='#77B7E5';
+const GOLD='#D4AF37',RED='#FF3B30',BLUE='#77B7E5',GREEN='#35C879';
 const cl={extrapolateLeft:'clamp' as const,extrapolateRight:'clamp' as const};
 const prog=(f:number,a:number,b:number)=>interpolate(f,[a,b],[0,1],{...cl,easing:Easing.inOut(Easing.cubic)});
 const Monitor:React.FC<{x:number;z:number;f:number}>=({x,z,f})=><group position={[x,0,z]}>
@@ -34,7 +34,7 @@ const d=(pts:number[][])=>pts.map(([x,y],i)=>(i?'L':'M')+x.toFixed(1)+' '+y.toFi
 export const BeforeTheOutcome1992:React.FC=()=>{
  const f=useCurrentFrame(),branch=prog(f,125,185),clock=prog(f,290,332),end=prog(f,425,469);
  const fade=1-prog(f,425,457);
- const branches=[{name:'BAISSE DE LA LIVRE',color:GOLD},{name:'DÉFENSE RÉUSSIE',color:RED},{name:'ATTENTE PROLONGÉE',color:BLUE}];
+ const branches=[{name:'BAISSE DE LA LIVRE',color:RED},{name:'DÉFENSE RÉUSSIE',color:GREEN},{name:'ATTENTE PROLONGÉE',color:BLUE}];
  return <AbsoluteFill style={{background:'#080B10',color:'#fff',fontFamily:'Arial,Helvetica,sans-serif',overflow:'hidden'}}>
  <Environment f={f}/>
  <img src="https://images.prismic.io/nyse-etf-central/ZoelfR5LeNNTwz2K_man-sits-front-multiple-monitors-displaying-stock-market-data-analyzing-financial-trends-1-.jpg" alt="Trader observing financial charts" style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',opacity:.92}}/>
