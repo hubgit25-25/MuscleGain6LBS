@@ -57,7 +57,8 @@ const PositionCounter:React.FC<{start:number}> = ({start})=>{
  const count=interpolate(local,[0,78],[0,10_000_000_000],{...clamp});
  const number=Math.floor(count).toLocaleString('fr-FR');
  const glow=interpolate(local,[0,35,78],[0,1,.72],clamp);
- return <AbsoluteFill style={{background:'radial-gradient(ellipse at 50% 48%,#242015 0%,#0b0c0f 48%,#030405 100%)',justifyContent:'center',alignItems:'center'}}>
+ const sceneOpacity=interpolate(f,[start,start+10],[0,1],clamp);
+ return <AbsoluteFill style={{opacity:sceneOpacity,background:'radial-gradient(ellipse at 50% 48%,#242015 0%,#0b0c0f 48%,#030405 100%)',justifyContent:'center',alignItems:'center'}}>
   <div style={{position:'absolute',inset:0,background:'linear-gradient(115deg,transparent 0%,#d4af370c 48%,transparent 70%)'}}/>
   <div style={{fontFamily:'Arial',fontSize:26,fontWeight:800,letterSpacing:12,color:GOLD,opacity:reveal,marginBottom:35}}>TAILLE DE LA POSITION</div>
   <div style={{fontFamily:'Arial',fontSize:112,fontWeight:900,letterSpacing:-5,color:GOLD,textAlign:'center',transform:`scale(${interpolate(reveal,[0,1],[.82,1],clamp)})`,textShadow:`0 0 ${25+glow*45}px #d4af37aa,0 8px 40px #000`}}>
