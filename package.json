@@ -8,8 +8,10 @@
     "build": "tsc --noEmit && remotion compositions src/index.ts",
     "typecheck": "tsc --noEmit",
     "render": "remotion render src/index.ts MuscleGain6LBS out/MuscleGain6LBS.mp4 --codec h264 --crf 18 --concurrency 2",
+    "render-chris": "remotion render src/index.ts chris out/chris.mp4 --codec h264 --crf 18 --concurrency 2",
     "render-position": "remotion render src/index.ts BillionDollarPosition out/BillionDollarPosition.mp4 --codec h264 --crf 18 --concurrency 2",
     "test-render": "remotion still src/index.ts MuscleGain6LBS out/test.png --frame 120",
+    "test-chris": "remotion still src/index.ts chris out/chris-preview.png --frame 150",
     "test-position": "remotion still src/index.ts BillionDollarPosition out/position-test.png --frame 240"
   },
   "dependencies": {
