@@ -1,0 +1,30 @@
+name: Render - Ce n'est pas un manque d'infos
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "projects/ce-nest-pas-infos/**"
+      - ".github/workflows/render-ce-nest-pas-infos.yml"
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/ce-nest-pas-infos
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun install
+      - name: Render MP4
+        run: bun run render
+      - name: Upload MP4
+        uses: actions/upload-artifact@v4
+        with:
+          name: ce-nest-pas-infos-mp4
+          path: projects/ce-nest-pas-infos/out/ce-nest-pas-infos.mp4
+          if-no-files-found: error
