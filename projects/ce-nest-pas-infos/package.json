@@ -1,0 +1,23 @@
+{
+  "name": "ce-nest-pas-infos",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "remotion studio src/index.ts",
+    "build": "remotion compositions src/index.ts",
+    "render": "remotion render src/index.ts CeNestPasInfos out/ce-nest-pas-infos.mp4 --codec h264"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.400",
+    "@remotion/google-fonts": "^4.0.400",
+    "@remotion/renderer": "^4.0.400",
+    "remotion": "^4.0.400",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
